@@ -3,10 +3,11 @@ import {
   Binary,
   Wand2,
   Globe,
+  Bug,
   type LucideIcon,
 } from "lucide-react";
 
-export type CategoryId = "json" | "encoding" | "generators" | "web";
+export type CategoryId = "json" | "encoding" | "generators" | "web" | "debugging";
 
 export interface Category {
   id: CategoryId;
@@ -44,6 +45,13 @@ export const categories: Record<CategoryId, Category> = {
     description: "Inspect URLs and HTTP status codes.",
     icon: Globe,
     order: 3,
+  },
+  debugging: {
+    id: "debugging",
+    label: "Debugging",
+    description: "Debug JWTs, regex, diffs, timestamps, and hashes.",
+    icon: Bug,
+    order: 4,
   },
 };
 

@@ -10,6 +10,11 @@ import {
   KeyRound,
   Search,
   ListChecks,
+  ShieldAlert,
+  Regex,
+  GitCompare,
+  Clock,
+  Hash,
   type LucideIcon,
 } from "lucide-react";
 import type { ComponentType } from "react";
@@ -26,6 +31,11 @@ import { UuidGeneratorTool } from "@/components/tools/generators/uuid-generator"
 import { PasswordGeneratorTool } from "@/components/tools/generators/password-generator";
 import { UrlParserTool } from "@/components/tools/web/url-parser";
 import { HttpStatusExplorerTool } from "@/components/tools/web/http-status-explorer";
+import { JwtDebuggerTool } from "@/components/tools/debugging/jwt-debugger";
+import { RegexTesterTool } from "@/components/tools/debugging/regex-tester";
+import { DiffCheckerTool } from "@/components/tools/debugging/diff-checker";
+import { TimestampConverterTool } from "@/components/tools/debugging/timestamp-converter";
+import { HashGeneratorTool } from "@/components/tools/debugging/hash-generator";
 
 export interface ToolDefinition {
   slug: string;
@@ -141,6 +151,51 @@ export const tools: ToolDefinition[] = [
     keywords: ["http", "status", "code", "error"],
     icon: ListChecks,
     component: HttpStatusExplorerTool,
+  },
+  {
+    slug: "jwt-debugger",
+    name: "JWT Debugger",
+    description: "Decode a JWT's header and payload — does not verify the signature.",
+    category: "debugging",
+    keywords: ["jwt", "token", "decode", "claims", "auth"],
+    icon: ShieldAlert,
+    component: JwtDebuggerTool,
+  },
+  {
+    slug: "regex-tester",
+    name: "Regex Tester",
+    description: "Test a regular expression against text with match highlighting.",
+    category: "debugging",
+    keywords: ["regex", "regexp", "pattern", "test", "match"],
+    icon: Regex,
+    component: RegexTesterTool,
+  },
+  {
+    slug: "diff-checker",
+    name: "Diff Checker",
+    description: "Compare two blocks of text and highlight line differences.",
+    category: "debugging",
+    keywords: ["diff", "compare", "difference", "changes"],
+    icon: GitCompare,
+    component: DiffCheckerTool,
+  },
+  {
+    slug: "timestamp-converter",
+    name: "Timestamp Converter",
+    description: "Convert between Unix timestamps and human-readable dates.",
+    category: "debugging",
+    keywords: ["timestamp", "unix", "epoch", "date", "time"],
+    icon: Clock,
+    component: TimestampConverterTool,
+  },
+  {
+    slug: "hash-generator",
+    name: "Hash Generator",
+    description: "Generate a SHA-256, SHA-384, or SHA-512 hash of text.",
+    category: "debugging",
+    keywords: ["hash", "sha256", "sha384", "sha512", "checksum"],
+    icon: Hash,
+    component: HashGeneratorTool,
   },
 ];
 
