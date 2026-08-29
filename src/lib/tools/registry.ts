@@ -15,6 +15,12 @@ import {
   GitCompare,
   Clock,
   Hash,
+  Send,
+  Database,
+  ScrollText,
+  Table,
+  FileCode2,
+  FileJson,
   type LucideIcon,
 } from "lucide-react";
 import type { ComponentType } from "react";
@@ -36,6 +42,12 @@ import { RegexTesterTool } from "@/components/tools/debugging/regex-tester";
 import { DiffCheckerTool } from "@/components/tools/debugging/diff-checker";
 import { TimestampConverterTool } from "@/components/tools/debugging/timestamp-converter";
 import { HashGeneratorTool } from "@/components/tools/debugging/hash-generator";
+import { ApiClientTool } from "@/components/tools/api-client/api-client-tool";
+import { LogAnalyzerTool } from "@/components/tools/debugging/log-analyzer";
+import { SqlFormatterTool } from "@/components/tools/database/sql-formatter";
+import { JsonCsvConverterTool } from "@/components/tools/conversion/json-csv-converter";
+import { JsonYamlConverterTool } from "@/components/tools/conversion/json-yaml-converter";
+import { XmlToJsonTool } from "@/components/tools/conversion/xml-to-json";
 
 export interface ToolDefinition {
   slug: string;
@@ -196,6 +208,60 @@ export const tools: ToolDefinition[] = [
     keywords: ["hash", "sha256", "sha384", "sha512", "checksum"],
     icon: Hash,
     component: HashGeneratorTool,
+  },
+  {
+    slug: "api-client",
+    name: "API Client",
+    description: "Send GET/POST/PUT/PATCH/DELETE requests and inspect the response.",
+    category: "api-testing",
+    keywords: ["api", "http", "request", "rest", "postman", "client"],
+    icon: Send,
+    component: ApiClientTool,
+  },
+  {
+    slug: "log-analyzer",
+    name: "Log Analyzer",
+    description: "Paste or upload logs to summarize errors, warnings, and common patterns.",
+    category: "debugging",
+    keywords: ["log", "logs", "analyze", "errors", "warnings"],
+    icon: ScrollText,
+    component: LogAnalyzerTool,
+  },
+  {
+    slug: "sql-formatter",
+    name: "SQL Formatter",
+    description: "Format common SQL with sensible indentation.",
+    category: "database",
+    keywords: ["sql", "format", "query", "database"],
+    icon: Database,
+    component: SqlFormatterTool,
+  },
+  {
+    slug: "json-csv-converter",
+    name: "JSON ↔ CSV",
+    description: "Convert between JSON and CSV.",
+    category: "conversion",
+    keywords: ["json", "csv", "convert", "spreadsheet"],
+    icon: Table,
+    component: JsonCsvConverterTool,
+  },
+  {
+    slug: "json-yaml-converter",
+    name: "JSON ↔ YAML",
+    description: "Convert between JSON and YAML.",
+    category: "conversion",
+    keywords: ["json", "yaml", "yml", "convert"],
+    icon: FileCode2,
+    component: JsonYamlConverterTool,
+  },
+  {
+    slug: "xml-to-json",
+    name: "XML → JSON",
+    description: "Parse and convert XML to JSON.",
+    category: "conversion",
+    keywords: ["xml", "json", "convert", "parse"],
+    icon: FileJson,
+    component: XmlToJsonTool,
   },
 ];
 

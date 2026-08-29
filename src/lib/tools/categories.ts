@@ -4,10 +4,21 @@ import {
   Wand2,
   Globe,
   Bug,
+  Send,
+  Database,
+  Repeat,
   type LucideIcon,
 } from "lucide-react";
 
-export type CategoryId = "json" | "encoding" | "generators" | "web" | "debugging";
+export type CategoryId =
+  | "json"
+  | "encoding"
+  | "generators"
+  | "web"
+  | "debugging"
+  | "api-testing"
+  | "database"
+  | "conversion";
 
 export interface Category {
   id: CategoryId;
@@ -49,9 +60,30 @@ export const categories: Record<CategoryId, Category> = {
   debugging: {
     id: "debugging",
     label: "Debugging",
-    description: "Debug JWTs, regex, diffs, timestamps, and hashes.",
+    description: "Debug JWTs, regex, diffs, timestamps, hashes, and logs.",
     icon: Bug,
     order: 4,
+  },
+  "api-testing": {
+    id: "api-testing",
+    label: "API Testing",
+    description: "Send HTTP requests and inspect the response.",
+    icon: Send,
+    order: 5,
+  },
+  database: {
+    id: "database",
+    label: "Database",
+    description: "Format SQL queries.",
+    icon: Database,
+    order: 6,
+  },
+  conversion: {
+    id: "conversion",
+    label: "Conversion",
+    description: "Convert between JSON, CSV, YAML, and XML.",
+    icon: Repeat,
+    order: 7,
   },
 };
 
