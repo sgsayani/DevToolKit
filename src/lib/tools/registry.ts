@@ -25,37 +25,12 @@ import {
   Webhook,
   Network,
   Waypoints,
+  AlertCircle,
+  FileCode,
+  GitBranch,
   type LucideIcon,
 } from "lucide-react";
-import type { ComponentType } from "react";
 import type { CategoryId } from "@/lib/tools/categories";
-
-import { JsonFormatterTool } from "@/components/tools/json/json-formatter";
-import { JsonValidatorTool } from "@/components/tools/json/json-validator";
-import { JsonMinifierTool } from "@/components/tools/json/json-minifier";
-import { Base64EncoderTool } from "@/components/tools/encoding/base64-encoder";
-import { Base64DecoderTool } from "@/components/tools/encoding/base64-decoder";
-import { UrlEncoderTool } from "@/components/tools/encoding/url-encoder";
-import { UrlDecoderTool } from "@/components/tools/encoding/url-decoder";
-import { UuidGeneratorTool } from "@/components/tools/generators/uuid-generator";
-import { PasswordGeneratorTool } from "@/components/tools/generators/password-generator";
-import { UrlParserTool } from "@/components/tools/web/url-parser";
-import { HttpStatusExplorerTool } from "@/components/tools/web/http-status-explorer";
-import { JwtDebuggerTool } from "@/components/tools/debugging/jwt-debugger";
-import { RegexTesterTool } from "@/components/tools/debugging/regex-tester";
-import { DiffCheckerTool } from "@/components/tools/debugging/diff-checker";
-import { TimestampConverterTool } from "@/components/tools/debugging/timestamp-converter";
-import { HashGeneratorTool } from "@/components/tools/debugging/hash-generator";
-import { ApiClientTool } from "@/components/tools/api-client/api-client-tool";
-import { LogAnalyzerTool } from "@/components/tools/debugging/log-analyzer";
-import { SqlFormatterTool } from "@/components/tools/database/sql-formatter";
-import { JsonCsvConverterTool } from "@/components/tools/conversion/json-csv-converter";
-import { JsonYamlConverterTool } from "@/components/tools/conversion/json-yaml-converter";
-import { XmlToJsonTool } from "@/components/tools/conversion/xml-to-json";
-import { ApiDocsGeneratorTool } from "@/components/tools/api-docs/api-docs-generator-tool";
-import { MockApiGeneratorTool } from "@/components/tools/mock-api/mock-api-generator-tool";
-import { SchemaVisualizerTool } from "@/components/tools/schema-visualizer/schema-visualizer-tool";
-import { SystemDesignTool } from "@/components/tools/system-design/system-design-tool";
 
 export interface ToolDefinition {
   slug: string;
@@ -64,13 +39,16 @@ export interface ToolDefinition {
   category: CategoryId;
   keywords: string[];
   icon: LucideIcon;
-  component: ComponentType;
 }
 
 /**
- * Single source of truth for every tool. The dynamic route, sidebar,
- * command palette, and homepage all read from this list — adding a tool
- * means writing its logic + component, then adding one entry here.
+ * Single source of truth for every tool's metadata. Deliberately holds NO
+ * component references — the sidebar, command palette, and homepage all
+ * import this file to list tools, and if it also carried (even
+ * next/dynamic-wrapped) component references, those modules would be
+ * reachable from every page's shared bundle, defeating per-tool code
+ * splitting. The actual components are wired up separately in
+ * `tool-components.ts`, imported only by the dynamic tool route.
  */
 export const tools: ToolDefinition[] = [
   {
@@ -80,7 +58,6 @@ export const tools: ToolDefinition[] = [
     category: "json",
     keywords: ["json", "format", "pretty", "indent", "beautify"],
     icon: AlignLeft,
-    component: JsonFormatterTool,
   },
   {
     slug: "json-validator",
@@ -89,7 +66,6 @@ export const tools: ToolDefinition[] = [
     category: "json",
     keywords: ["json", "validate", "lint", "syntax", "error"],
     icon: CheckCircle2,
-    component: JsonValidatorTool,
   },
   {
     slug: "json-minifier",
@@ -98,7 +74,6 @@ export const tools: ToolDefinition[] = [
     category: "json",
     keywords: ["json", "minify", "compress", "compact"],
     icon: Minimize2,
-    component: JsonMinifierTool,
   },
   {
     slug: "base64-encoder",
@@ -107,7 +82,6 @@ export const tools: ToolDefinition[] = [
     category: "encoding",
     keywords: ["base64", "encode"],
     icon: Lock,
-    component: Base64EncoderTool,
   },
   {
     slug: "base64-decoder",
@@ -116,7 +90,6 @@ export const tools: ToolDefinition[] = [
     category: "encoding",
     keywords: ["base64", "decode"],
     icon: LockOpen,
-    component: Base64DecoderTool,
   },
   {
     slug: "url-encoder",
@@ -125,7 +98,6 @@ export const tools: ToolDefinition[] = [
     category: "encoding",
     keywords: ["url", "encode", "percent", "uri"],
     icon: Link,
-    component: UrlEncoderTool,
   },
   {
     slug: "url-decoder",
@@ -134,7 +106,6 @@ export const tools: ToolDefinition[] = [
     category: "encoding",
     keywords: ["url", "decode", "percent", "uri"],
     icon: Unlink,
-    component: UrlDecoderTool,
   },
   {
     slug: "uuid-generator",
@@ -143,7 +114,6 @@ export const tools: ToolDefinition[] = [
     category: "generators",
     keywords: ["uuid", "guid", "generate", "id"],
     icon: Fingerprint,
-    component: UuidGeneratorTool,
   },
   {
     slug: "password-generator",
@@ -152,7 +122,6 @@ export const tools: ToolDefinition[] = [
     category: "generators",
     keywords: ["password", "generate", "secure", "random"],
     icon: KeyRound,
-    component: PasswordGeneratorTool,
   },
   {
     slug: "url-parser",
@@ -161,7 +130,6 @@ export const tools: ToolDefinition[] = [
     category: "web",
     keywords: ["url", "parse", "query", "params", "hostname"],
     icon: Search,
-    component: UrlParserTool,
   },
   {
     slug: "http-status-explorer",
@@ -170,7 +138,6 @@ export const tools: ToolDefinition[] = [
     category: "web",
     keywords: ["http", "status", "code", "error"],
     icon: ListChecks,
-    component: HttpStatusExplorerTool,
   },
   {
     slug: "jwt-debugger",
@@ -179,7 +146,6 @@ export const tools: ToolDefinition[] = [
     category: "debugging",
     keywords: ["jwt", "token", "decode", "claims", "auth"],
     icon: ShieldAlert,
-    component: JwtDebuggerTool,
   },
   {
     slug: "regex-tester",
@@ -188,7 +154,6 @@ export const tools: ToolDefinition[] = [
     category: "debugging",
     keywords: ["regex", "regexp", "pattern", "test", "match"],
     icon: Regex,
-    component: RegexTesterTool,
   },
   {
     slug: "diff-checker",
@@ -197,7 +162,6 @@ export const tools: ToolDefinition[] = [
     category: "debugging",
     keywords: ["diff", "compare", "difference", "changes"],
     icon: GitCompare,
-    component: DiffCheckerTool,
   },
   {
     slug: "timestamp-converter",
@@ -206,7 +170,6 @@ export const tools: ToolDefinition[] = [
     category: "debugging",
     keywords: ["timestamp", "unix", "epoch", "date", "time"],
     icon: Clock,
-    component: TimestampConverterTool,
   },
   {
     slug: "hash-generator",
@@ -215,7 +178,6 @@ export const tools: ToolDefinition[] = [
     category: "debugging",
     keywords: ["hash", "sha256", "sha384", "sha512", "checksum"],
     icon: Hash,
-    component: HashGeneratorTool,
   },
   {
     slug: "api-client",
@@ -224,7 +186,6 @@ export const tools: ToolDefinition[] = [
     category: "api-testing",
     keywords: ["api", "http", "request", "rest", "postman", "client"],
     icon: Send,
-    component: ApiClientTool,
   },
   {
     slug: "log-analyzer",
@@ -233,7 +194,6 @@ export const tools: ToolDefinition[] = [
     category: "debugging",
     keywords: ["log", "logs", "analyze", "errors", "warnings"],
     icon: ScrollText,
-    component: LogAnalyzerTool,
   },
   {
     slug: "sql-formatter",
@@ -242,7 +202,6 @@ export const tools: ToolDefinition[] = [
     category: "database",
     keywords: ["sql", "format", "query", "database"],
     icon: Database,
-    component: SqlFormatterTool,
   },
   {
     slug: "json-csv-converter",
@@ -251,7 +210,6 @@ export const tools: ToolDefinition[] = [
     category: "conversion",
     keywords: ["json", "csv", "convert", "spreadsheet"],
     icon: Table,
-    component: JsonCsvConverterTool,
   },
   {
     slug: "json-yaml-converter",
@@ -260,7 +218,6 @@ export const tools: ToolDefinition[] = [
     category: "conversion",
     keywords: ["json", "yaml", "yml", "convert"],
     icon: FileCode2,
-    component: JsonYamlConverterTool,
   },
   {
     slug: "xml-to-json",
@@ -269,7 +226,6 @@ export const tools: ToolDefinition[] = [
     category: "conversion",
     keywords: ["xml", "json", "convert", "parse"],
     icon: FileJson,
-    component: XmlToJsonTool,
   },
   {
     slug: "api-docs-generator",
@@ -278,7 +234,6 @@ export const tools: ToolDefinition[] = [
     category: "api-testing",
     keywords: ["api", "docs", "documentation", "openapi", "swagger", "markdown"],
     icon: BookOpen,
-    component: ApiDocsGeneratorTool,
   },
   {
     slug: "mock-api-generator",
@@ -287,7 +242,6 @@ export const tools: ToolDefinition[] = [
     category: "api-testing",
     keywords: ["mock", "api", "fake", "stub", "test data"],
     icon: Webhook,
-    component: MockApiGeneratorTool,
   },
   {
     slug: "schema-visualizer",
@@ -296,7 +250,6 @@ export const tools: ToolDefinition[] = [
     category: "diagrams",
     keywords: ["schema", "database", "er diagram", "tables", "relationships", "foreign key"],
     icon: Network,
-    component: SchemaVisualizerTool,
   },
   {
     slug: "system-design",
@@ -305,7 +258,46 @@ export const tools: ToolDefinition[] = [
     category: "diagrams",
     keywords: ["system design", "architecture", "diagram", "microservices"],
     icon: Waypoints,
-    component: SystemDesignTool,
+  },
+  {
+    slug: "error-explainer",
+    name: "Error Explainer",
+    description: "Paste an error or stack trace to get a plain-language explanation and fixes.",
+    category: "ai",
+    keywords: ["ai", "error", "stack trace", "explain", "debug"],
+    icon: AlertCircle,
+  },
+  {
+    slug: "code-explainer",
+    name: "Code Explainer",
+    description: "Paste code to get a summary, walkthrough, and potential issues.",
+    category: "ai",
+    keywords: ["ai", "code", "explain", "review"],
+    icon: FileCode,
+  },
+  {
+    slug: "git-command-generator",
+    name: "Git Command Generator",
+    description: "Describe what you want to do and get the exact git command.",
+    category: "ai",
+    keywords: ["ai", "git", "command", "version control"],
+    icon: GitBranch,
+  },
+  {
+    slug: "sql-generator",
+    name: "SQL Generator (AI)",
+    description: "Describe a query in plain English and get SQL to review — never executed.",
+    category: "ai",
+    keywords: ["ai", "sql", "query", "generate"],
+    icon: Database,
+  },
+  {
+    slug: "regex-generator",
+    name: "Regex Generator (AI)",
+    description: "Describe a pattern in plain English and get a regular expression.",
+    category: "ai",
+    keywords: ["ai", "regex", "pattern", "generate"],
+    icon: Regex,
   },
 ];
 

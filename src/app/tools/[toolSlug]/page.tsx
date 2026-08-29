@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ToolShell } from "@/components/layout/tool-shell";
 import { getToolBySlug, tools } from "@/lib/tools/registry";
+import { ToolComponentLoader } from "@/lib/tools/tool-components";
 
 interface ToolPageProps {
   params: Promise<{ toolSlug: string }>;
@@ -26,11 +27,9 @@ export default async function ToolPage({ params }: ToolPageProps) {
   const tool = getToolBySlug(toolSlug);
   if (!tool) notFound();
 
-  const ToolComponent = tool.component;
-
   return (
-    <ToolShell title={tool.name} description={tool.description}>
-      <ToolComponent />
+    <ToolShell slug={tool.slug} title={tool.name} description={tool.description}>
+      <ToolComponentLoader slug={tool.slug} />
     </ToolShell>
   );
 }

@@ -8,6 +8,7 @@ import {
   Database,
   Repeat,
   Workflow,
+  Cpu,
   type LucideIcon,
 } from "lucide-react";
 
@@ -20,7 +21,8 @@ export type CategoryId =
   | "api-testing"
   | "database"
   | "conversion"
-  | "diagrams";
+  | "diagrams"
+  | "ai";
 
 export interface Category {
   id: CategoryId;
@@ -93,6 +95,13 @@ export const categories: Record<CategoryId, Category> = {
     description: "Visualize database schemas and system architecture.",
     icon: Workflow,
     order: 8,
+  },
+  ai: {
+    id: "ai",
+    label: "AI Assistant",
+    description: "Explain errors and code, and generate git, SQL, and regex.",
+    icon: Cpu,
+    order: 9,
   },
 };
 
