@@ -7,6 +7,7 @@ import {
   Send,
   Database,
   Repeat,
+  Workflow,
   type LucideIcon,
 } from "lucide-react";
 
@@ -18,7 +19,8 @@ export type CategoryId =
   | "debugging"
   | "api-testing"
   | "database"
-  | "conversion";
+  | "conversion"
+  | "diagrams";
 
 export interface Category {
   id: CategoryId;
@@ -67,7 +69,7 @@ export const categories: Record<CategoryId, Category> = {
   "api-testing": {
     id: "api-testing",
     label: "API Testing",
-    description: "Send HTTP requests and inspect the response.",
+    description: "Send requests, document endpoints, and mock APIs.",
     icon: Send,
     order: 5,
   },
@@ -84,6 +86,13 @@ export const categories: Record<CategoryId, Category> = {
     description: "Convert between JSON, CSV, YAML, and XML.",
     icon: Repeat,
     order: 7,
+  },
+  diagrams: {
+    id: "diagrams",
+    label: "Diagrams",
+    description: "Visualize database schemas and system architecture.",
+    icon: Workflow,
+    order: 8,
   },
 };
 

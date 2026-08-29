@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isSafeUrl } from "@/lib/server/ssrf-guard";
 import { checkRateLimit } from "@/lib/server/rate-limit";
+import { getClientKey, isSameOrigin } from "@/lib/server/request-guards";
 
 // Needs Node's `dns`/`net` for the SSRF guard — not available on Edge.
 export const runtime = "nodejs";
@@ -14,27 +15,6 @@ interface ProxyRequestBody {
   url?: string;
   headers?: Record<string, string>;
   body?: string;
-}
-
-function getClientKey(request: Request): string {
-  const xff = request.headers.get("x-forwarded-for");
-  if (xff) return xff.split(",")[0].trim();
-  return request.headers.get("x-real-ip") ?? "unknown";
-}
-
-/** Another origin's page can POST here even though it could never read the
- * response (CORS only blocks reading, not sending) — without this check
- * the proxy would be a blind SSRF cannon usable from any website. */
-function isSameOrigin(request: Request): boolean {
-  const origin = request.headers.get("origin");
-  if (!origin) return true; // no Origin header — typical of a same-page fetch
-  const host = request.headers.get("host");
-  if (!host) return false;
-  try {
-    return new URL(origin).host === host;
-  } catch {
-    return false;
-  }
 }
 
 export async function POST(request: Request) {

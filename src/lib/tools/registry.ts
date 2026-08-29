@@ -21,6 +21,10 @@ import {
   Table,
   FileCode2,
   FileJson,
+  BookOpen,
+  Webhook,
+  Network,
+  Waypoints,
   type LucideIcon,
 } from "lucide-react";
 import type { ComponentType } from "react";
@@ -48,6 +52,10 @@ import { SqlFormatterTool } from "@/components/tools/database/sql-formatter";
 import { JsonCsvConverterTool } from "@/components/tools/conversion/json-csv-converter";
 import { JsonYamlConverterTool } from "@/components/tools/conversion/json-yaml-converter";
 import { XmlToJsonTool } from "@/components/tools/conversion/xml-to-json";
+import { ApiDocsGeneratorTool } from "@/components/tools/api-docs/api-docs-generator-tool";
+import { MockApiGeneratorTool } from "@/components/tools/mock-api/mock-api-generator-tool";
+import { SchemaVisualizerTool } from "@/components/tools/schema-visualizer/schema-visualizer-tool";
+import { SystemDesignTool } from "@/components/tools/system-design/system-design-tool";
 
 export interface ToolDefinition {
   slug: string;
@@ -262,6 +270,42 @@ export const tools: ToolDefinition[] = [
     keywords: ["xml", "json", "convert", "parse"],
     icon: FileJson,
     component: XmlToJsonTool,
+  },
+  {
+    slug: "api-docs-generator",
+    name: "API Documentation Generator",
+    description: "Describe endpoints and export clean Markdown, HTML, or OpenAPI docs.",
+    category: "api-testing",
+    keywords: ["api", "docs", "documentation", "openapi", "swagger", "markdown"],
+    icon: BookOpen,
+    component: ApiDocsGeneratorTool,
+  },
+  {
+    slug: "mock-api-generator",
+    name: "Mock API Generator",
+    description: "Define a JSON schema and publish a live mock endpoint to test against.",
+    category: "api-testing",
+    keywords: ["mock", "api", "fake", "stub", "test data"],
+    icon: Webhook,
+    component: MockApiGeneratorTool,
+  },
+  {
+    slug: "schema-visualizer",
+    name: "Database Schema Visualizer",
+    description: "Define tables and relationships as an interactive ER diagram.",
+    category: "diagrams",
+    keywords: ["schema", "database", "er diagram", "tables", "relationships", "foreign key"],
+    icon: Network,
+    component: SchemaVisualizerTool,
+  },
+  {
+    slug: "system-design",
+    name: "System Design Diagram",
+    description: "Build an architecture diagram from common system components.",
+    category: "diagrams",
+    keywords: ["system design", "architecture", "diagram", "microservices"],
+    icon: Waypoints,
+    component: SystemDesignTool,
   },
 ];
 
