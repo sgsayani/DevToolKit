@@ -13,6 +13,12 @@ import {
 } from "@/lib/utils/paste";
 
 export const runtime = "nodejs";
+// isOwner (and, for private pastes, the content itself) is personalized per
+// requester — force-dynamic plus no-store so a shared cache can never serve
+// one visitor's view of a paste to another.
+export const dynamic = "force-dynamic";
+
+const NO_STORE = { "Cache-Control": "private, no-store" };
 
 interface PastePayload {
   title?: unknown;
@@ -28,7 +34,10 @@ interface RouteParams {
 
 export async function GET(_request: Request, { params }: RouteParams) {
   if (!isMongoConfigured()) {
-    return NextResponse.json({ ok: false, code: "not_configured", error: NOT_CONFIGURED_MESSAGE });
+    return NextResponse.json(
+      { ok: false, code: "not_configured", error: NOT_CONFIGURED_MESSAGE },
+      { headers: NO_STORE },
+    );
   }
   const { id } = await params;
   const paste = await getPasteById(id);
@@ -39,22 +48,25 @@ export async function GET(_request: Request, { params }: RouteParams) {
   // not "forbidden" — this avoids confirming to a stranger that a given id
   // even exists.
   if (!paste || (paste.visibility === "private" && !isOwner)) {
-    return NextResponse.json({ ok: false, error: "Paste not found." }, { status: 404 });
+    return NextResponse.json({ ok: false, error: "Paste not found." }, { status: 404, headers: NO_STORE });
   }
 
-  return NextResponse.json({
-    ok: true,
-    paste: {
-      id: paste._id,
-      title: paste.title,
-      content: paste.content,
-      language: paste.language,
-      visibility: paste.visibility,
-      createdAt: paste.createdAt.toISOString(),
-      expiresAt: paste.expiresAt ? paste.expiresAt.toISOString() : null,
-      isOwner,
+  return NextResponse.json(
+    {
+      ok: true,
+      paste: {
+        id: paste._id,
+        title: paste.title,
+        content: paste.content,
+        language: paste.language,
+        visibility: paste.visibility,
+        createdAt: paste.createdAt.toISOString(),
+        expiresAt: paste.expiresAt ? paste.expiresAt.toISOString() : null,
+        isOwner,
+      },
     },
-  });
+    { headers: NO_STORE },
+  );
 }
 
 export async function PATCH(request: Request, { params }: RouteParams) {

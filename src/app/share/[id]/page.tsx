@@ -10,6 +10,10 @@ import { isMongoConfigured, NOT_CONFIGURED_MESSAGE } from "@/lib/server/mongodb"
 import { highlightPaste } from "@/lib/server/paste-highlight";
 import { languageLabel } from "@/lib/utils/paste";
 
+// This page's HTML depends on who's asking (isOwner, and for a private
+// paste the content itself) — never let it be served from a shared cache.
+export const dynamic = "force-dynamic";
+
 interface PasteViewPageProps {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ created?: string; updated?: string }>;

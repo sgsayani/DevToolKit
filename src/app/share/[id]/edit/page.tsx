@@ -4,6 +4,10 @@ import { getPasteById } from "@/lib/server/paste-store";
 import { getOwnerHash } from "@/lib/server/owner-token";
 import { isMongoConfigured, NOT_CONFIGURED_MESSAGE } from "@/lib/server/mongodb";
 
+// Only the owner can ever load this page's content — never let it be
+// served from a shared cache.
+export const dynamic = "force-dynamic";
+
 interface EditPastePageProps {
   params: Promise<{ id: string }>;
 }

@@ -13,6 +13,12 @@ import {
 } from "@/lib/utils/paste";
 
 export const runtime = "nodejs";
+// This response is personalized per owner cookie — force-dynamic plus an
+// explicit no-store header so no shared cache (CDN, proxy, browser) can
+// ever serve one visitor's paste list to a different visitor.
+export const dynamic = "force-dynamic";
+
+const NO_STORE = { "Cache-Control": "private, no-store" };
 
 interface PastePayload {
   title?: unknown;
@@ -80,22 +86,28 @@ export async function POST(request: Request) {
 // return another visitor's data.
 export async function GET() {
   if (!isMongoConfigured()) {
-    return NextResponse.json({ ok: false, code: "not_configured", error: NOT_CONFIGURED_MESSAGE, pastes: [] });
+    return NextResponse.json(
+      { ok: false, code: "not_configured", error: NOT_CONFIGURED_MESSAGE, pastes: [] },
+      { headers: NO_STORE },
+    );
   }
   const ownerHash = await getOwnerHash();
   if (!ownerHash) {
-    return NextResponse.json({ ok: true, pastes: [] });
+    return NextResponse.json({ ok: true, pastes: [] }, { headers: NO_STORE });
   }
   const pastes = await listPastesByOwner(ownerHash);
-  return NextResponse.json({
-    ok: true,
-    pastes: pastes.map((paste) => ({
-      id: paste._id,
-      title: paste.title,
-      language: paste.language,
-      visibility: paste.visibility,
-      createdAt: paste.createdAt.toISOString(),
-      expiresAt: paste.expiresAt ? paste.expiresAt.toISOString() : null,
-    })),
-  });
+  return NextResponse.json(
+    {
+      ok: true,
+      pastes: pastes.map((paste) => ({
+        id: paste._id,
+        title: paste.title,
+        language: paste.language,
+        visibility: paste.visibility,
+        createdAt: paste.createdAt.toISOString(),
+        expiresAt: paste.expiresAt ? paste.expiresAt.toISOString() : null,
+      })),
+    },
+    { headers: NO_STORE },
+  );
 }
