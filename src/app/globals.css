@@ -132,3 +132,50 @@
     @apply font-sans;
   }
 }
+
+/* Code Share's syntax highlighting — a small custom token palette instead
+   of importing one of highlight.js's bundled themes, so paste content
+   matches DevKit's own colors (the same string/number/keyword convention
+   already used by the JSON tree view) rather than introducing a separate
+   visual style. */
+.hljs {
+  color: var(--foreground);
+}
+.hljs-comment,
+.hljs-quote {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.hljs-string,
+.hljs-attr,
+.hljs-regexp,
+.hljs-symbol {
+  color: oklch(0.45 0.13 155);
+}
+.dark .hljs-string,
+.dark .hljs-attr,
+.dark .hljs-regexp,
+.dark .hljs-symbol {
+  color: oklch(0.75 0.15 155);
+}
+.hljs-number,
+.hljs-literal {
+  color: oklch(0.45 0.16 255);
+}
+.dark .hljs-number,
+.dark .hljs-literal {
+  color: oklch(0.72 0.14 255);
+}
+.hljs-keyword,
+.hljs-built_in,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-tag {
+  color: var(--primary);
+}
+.hljs-title,
+.hljs-title.function_,
+.hljs-title.class_ {
+  color: var(--foreground);
+  font-weight: 600;
+}

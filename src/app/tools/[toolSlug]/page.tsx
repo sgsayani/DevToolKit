@@ -28,7 +28,12 @@ export default async function ToolPage({ params }: ToolPageProps) {
   if (!tool) notFound();
 
   return (
-    <ToolShell slug={tool.slug} title={tool.name} description={tool.description}>
+    <ToolShell
+      slug={tool.slug}
+      title={tool.name}
+      description={tool.description}
+      localProcessing={tool.localProcessing ?? true}
+    >
       <ToolComponentLoader slug={tool.slug} />
     </ToolShell>
   );

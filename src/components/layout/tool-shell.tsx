@@ -12,9 +12,19 @@ interface ToolShellProps {
   title: string;
   description: string;
   children: ReactNode;
+  /** Defaults to true, matching every existing tool. Set false for tools
+   * whose content is sent to a server (e.g. Code Share) so the "Processed
+   * locally" badge isn't shown where it wouldn't be accurate. */
+  localProcessing?: boolean;
 }
 
-export function ToolShell({ slug, title, description, children }: ToolShellProps) {
+export function ToolShell({
+  slug,
+  title,
+  description,
+  children,
+  localProcessing = true,
+}: ToolShellProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorited = isFavorite(slug);
 
@@ -38,7 +48,7 @@ export function ToolShell({ slug, title, description, children }: ToolShellProps
             <p className="mt-1 text-sm text-muted-foreground">{description}</p>
           </div>
         </div>
-        <LocalBadge className="sm:mt-1" />
+        {localProcessing && <LocalBadge className="sm:mt-1" />}
       </div>
       {children}
     </div>

@@ -9,6 +9,7 @@ import {
   Repeat,
   Workflow,
   Cpu,
+  Share2,
   type LucideIcon,
 } from "lucide-react";
 
@@ -22,7 +23,8 @@ export type CategoryId =
   | "database"
   | "conversion"
   | "diagrams"
-  | "ai";
+  | "ai"
+  | "share";
 
 export interface Category {
   id: CategoryId;
@@ -102,6 +104,13 @@ export const categories: Record<CategoryId, Category> = {
     description: "Explain errors and code, and generate git, SQL, and regex.",
     icon: Cpu,
     order: 9,
+  },
+  share: {
+    id: "share",
+    label: "Share",
+    description: "Share code snippets and text via a link.",
+    icon: Share2,
+    order: 10,
   },
 };
 

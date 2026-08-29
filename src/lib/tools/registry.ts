@@ -28,6 +28,8 @@ import {
   AlertCircle,
   FileCode,
   GitBranch,
+  SquareCode,
+  Files,
   type LucideIcon,
 } from "lucide-react";
 import type { CategoryId } from "@/lib/tools/categories";
@@ -39,6 +41,11 @@ export interface ToolDefinition {
   category: CategoryId;
   keywords: string[];
   icon: LucideIcon;
+  /** Defaults to true for every existing tool (unchanged behavior). Set
+   * false only for tools whose content genuinely leaves the browser (e.g.
+   * Code Share, which persists to a server database) — ToolShell uses this
+   * to decide whether to show the "Processed locally" badge. */
+  localProcessing?: boolean;
 }
 
 /**
@@ -298,6 +305,24 @@ export const tools: ToolDefinition[] = [
     category: "ai",
     keywords: ["ai", "regex", "pattern", "generate"],
     icon: Regex,
+  },
+  {
+    slug: "code-share",
+    name: "Code Share",
+    description: "Create a paste and share code or text via a unique link.",
+    category: "share",
+    keywords: ["paste", "share", "snippet", "gist", "code share", "new paste"],
+    icon: SquareCode,
+    localProcessing: false,
+  },
+  {
+    slug: "my-pastes",
+    name: "My Pastes",
+    description: "View, edit, and delete the pastes you've created.",
+    category: "share",
+    keywords: ["paste", "my pastes", "share", "history"],
+    icon: Files,
+    localProcessing: false,
   },
 ];
 

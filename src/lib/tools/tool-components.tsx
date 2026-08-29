@@ -176,6 +176,14 @@ export const toolComponents: Record<string, ComponentType> = {
     () => import("@/components/tools/ai/regex-generator-tool").then((m) => m.RegexGeneratorTool),
     { ssr: false, loading },
   ),
+  "code-share": dynamic(
+    () => import("@/components/tools/share/code-share-tool").then((m) => m.CodeShareTool),
+    { ssr: false, loading },
+  ),
+  "my-pastes": dynamic(
+    () => import("@/components/tools/share/my-pastes-tool").then((m) => m.MyPastesTool),
+    { ssr: false, loading },
+  ),
 };
 
 export function ToolComponentLoader({ slug }: { slug: string }) {
