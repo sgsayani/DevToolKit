@@ -14,8 +14,8 @@ export function ComponentNode({ data, selected }: NodeProps<ComponentFlowNode>) 
   return (
     <div
       className={cn(
-        "flex min-w-[150px] items-center gap-2 rounded-lg border bg-card px-3 py-2 shadow-sm",
-        selected ? "border-foreground" : "border-border",
+        "flex min-w-[150px] items-center gap-2 rounded-lg border bg-card px-3 py-2 shadow-sm transition-shadow",
+        selected ? "border-primary ring-2 ring-primary/15" : "border-border",
       )}
     >
       <Handle type="target" position={Position.Left} className="!bg-foreground/40" />

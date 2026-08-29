@@ -14,8 +14,8 @@ export function TableNode({ data, selected }: NodeProps<TableFlowNode>) {
   return (
     <div
       className={cn(
-        "min-w-[200px] rounded-lg border bg-card shadow-sm",
-        selected ? "border-foreground" : "border-border",
+        "min-w-[200px] rounded-lg border bg-card shadow-sm transition-shadow",
+        selected ? "border-primary ring-2 ring-primary/15" : "border-border",
       )}
     >
       <Handle type="target" position={Position.Left} className="!bg-foreground/40" />

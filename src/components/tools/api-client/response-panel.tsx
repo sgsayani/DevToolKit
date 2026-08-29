@@ -45,8 +45,11 @@ export function ResponsePanel({ result, loading }: ResponsePanelProps) {
 
   if (!result) {
     return (
-      <div className="flex h-full min-h-[160px] items-center justify-center rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-        Send a request to see the response.
+      <div className="flex h-full min-h-[160px] flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-border p-6 text-center">
+        <p className="text-sm font-medium">No request yet</p>
+        <p className="text-sm text-muted-foreground">
+          Enter an endpoint above and send your first request.
+        </p>
       </div>
     );
   }

@@ -61,10 +61,10 @@ export default function Home() {
                     <Link
                       key={tool.slug}
                       href={`/tools/${tool.slug}`}
-                      className="group flex flex-col gap-1.5 rounded-lg border border-border p-4 transition-colors hover:border-foreground/20 hover:bg-muted/40"
+                      className="group flex flex-col gap-1.5 rounded-lg border border-border p-4 transition-colors hover:border-primary/30 hover:bg-accent/40"
                     >
                       <div className="flex items-center gap-2">
-                        <tool.icon className="size-4 text-muted-foreground group-hover:text-foreground" />
+                        <tool.icon className="size-4 text-muted-foreground group-hover:text-primary" />
                         <span className="text-sm font-medium">{tool.name}</span>
                       </div>
                       <p className="text-xs text-muted-foreground">{tool.description}</p>

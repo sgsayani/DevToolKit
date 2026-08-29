@@ -24,7 +24,7 @@ export function TopNav({ onSearchClick, onMenuClick }: TopNavProps) {
       </Button>
 
       <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-        <span className="flex size-6 items-center justify-center rounded-md bg-foreground text-xs font-bold text-background">
+        <span className="flex size-6 items-center justify-center rounded-md bg-primary text-xs font-bold text-primary-foreground">
           D
         </span>
         DevKit
