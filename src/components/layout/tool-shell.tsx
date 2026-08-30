@@ -3,7 +3,7 @@
 import { type ReactNode } from "react";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { LocalBadge } from "@/components/tools/shared/local-badge";
+import { DataHandlingBadge, type DataHandling } from "@/components/tools/shared/local-badge";
 import { useFavorites } from "@/hooks/use-favorites";
 import { cn } from "@/lib/utils";
 
@@ -12,10 +12,10 @@ interface ToolShellProps {
   title: string;
   description: string;
   children: ReactNode;
-  /** Defaults to true, matching every existing tool. Set false for tools
-   * whose content is sent to a server (e.g. Code Share) so the "Processed
-   * locally" badge isn't shown where it wouldn't be accurate. */
-  localProcessing?: boolean;
+  /** Defaults to "local", matching every tool whose registry entry doesn't
+   * say otherwise. Drives which trust badge is shown — never set this to
+   * something that doesn't match what the tool actually does. */
+  dataHandling?: DataHandling;
 }
 
 export function ToolShell({
@@ -23,7 +23,7 @@ export function ToolShell({
   title,
   description,
   children,
-  localProcessing = true,
+  dataHandling = "local",
 }: ToolShellProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorited = isFavorite(slug);
@@ -48,7 +48,7 @@ export function ToolShell({
             <p className="mt-1 text-sm text-muted-foreground">{description}</p>
           </div>
         </div>
-        {localProcessing && <LocalBadge className="sm:mt-1" />}
+        <DataHandlingBadge mode={dataHandling} className="sm:mt-1" />
       </div>
       {children}
     </div>

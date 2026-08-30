@@ -5,6 +5,7 @@ import { TopNav } from "@/components/layout/top-nav";
 import { Sidebar } from "@/components/layout/sidebar";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { CommandPalette } from "@/components/layout/command-palette";
+import { Footer } from "@/components/layout/footer";
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -25,6 +26,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           {children}
         </main>
       </div>
+      <Footer />
       <MobileNav open={mobileNavOpen} onOpenChange={setMobileNavOpen} />
       <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
     </div>

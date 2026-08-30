@@ -21,12 +21,17 @@ interface PasteViewPageProps {
 
 export async function generateMetadata({ params }: PasteViewPageProps): Promise<Metadata> {
   const { id } = await params;
-  if (!isMongoConfigured()) return { title: "Code Share — DevKit" };
+  // Never indexed: paste content is user-generated and often not meant for
+  // public discovery (that's the whole point of unlisted/private), and even
+  // public pastes aren't something DevKit itself wants to promise as a
+  // stable, indexable page.
+  if (!isMongoConfigured()) return { title: "Paste", robots: { index: false } };
   const paste = await getPasteById(id);
-  if (!paste || paste.visibility === "private") return { title: "Paste — DevKit" };
+  if (!paste || paste.visibility === "private") return { title: "Paste", robots: { index: false } };
   return {
-    title: paste.title ? `${paste.title} — DevKit Code Share` : "Code Share — DevKit",
+    title: paste.title || "Untitled paste",
     description: `A ${languageLabel(paste.language)} paste shared on DevKit.`,
+    robots: { index: false },
   };
 }
 

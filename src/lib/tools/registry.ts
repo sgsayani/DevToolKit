@@ -41,11 +41,12 @@ export interface ToolDefinition {
   category: CategoryId;
   keywords: string[];
   icon: LucideIcon;
-  /** Defaults to true for every existing tool (unchanged behavior). Set
-   * false only for tools whose content genuinely leaves the browser (e.g.
-   * Code Share, which persists to a server database) — ToolShell uses this
-   * to decide whether to show the "Processed locally" badge. */
-  localProcessing?: boolean;
+  /** Defaults to "local" for every tool that doesn't say otherwise. Set
+   * "server" for tools whose content goes to DevKit's own server (a proxy,
+   * a stored mock, a stored paste) or "ai" for tools that send content to
+   * an external AI provider — ToolShell uses this to show the accurate
+   * trust badge. Never set to something that doesn't match reality. */
+  dataHandling?: "local" | "server" | "ai";
 }
 
 /**
@@ -193,6 +194,7 @@ export const tools: ToolDefinition[] = [
     category: "api",
     keywords: ["api", "http", "request", "rest", "postman", "client"],
     icon: Send,
+    dataHandling: "server",
   },
   {
     slug: "log-analyzer",
@@ -249,6 +251,7 @@ export const tools: ToolDefinition[] = [
     category: "api",
     keywords: ["mock", "api", "fake", "stub", "test data"],
     icon: Webhook,
+    dataHandling: "server",
   },
   {
     slug: "schema-visualizer",
@@ -273,6 +276,7 @@ export const tools: ToolDefinition[] = [
     category: "ai",
     keywords: ["ai", "error", "stack trace", "explain", "debug"],
     icon: AlertCircle,
+    dataHandling: "ai",
   },
   {
     slug: "code-explainer",
@@ -281,6 +285,7 @@ export const tools: ToolDefinition[] = [
     category: "ai",
     keywords: ["ai", "code", "explain", "review"],
     icon: FileCode,
+    dataHandling: "ai",
   },
   {
     slug: "git-command-generator",
@@ -289,6 +294,7 @@ export const tools: ToolDefinition[] = [
     category: "generators",
     keywords: ["ai", "git", "command", "version control"],
     icon: GitBranch,
+    dataHandling: "ai",
   },
   {
     slug: "sql-generator",
@@ -297,6 +303,7 @@ export const tools: ToolDefinition[] = [
     category: "ai",
     keywords: ["ai", "sql", "query", "generate"],
     icon: Database,
+    dataHandling: "ai",
   },
   {
     slug: "regex-generator",
@@ -305,6 +312,7 @@ export const tools: ToolDefinition[] = [
     category: "ai",
     keywords: ["ai", "regex", "pattern", "generate"],
     icon: Regex,
+    dataHandling: "ai",
   },
   {
     slug: "code-share",
@@ -313,7 +321,7 @@ export const tools: ToolDefinition[] = [
     category: "share",
     keywords: ["paste", "share", "snippet", "gist", "code share", "new paste"],
     icon: SquareCode,
-    localProcessing: false,
+    dataHandling: "server",
   },
   {
     slug: "my-pastes",
@@ -322,7 +330,7 @@ export const tools: ToolDefinition[] = [
     category: "share",
     keywords: ["paste", "my pastes", "share", "history"],
     icon: Files,
-    localProcessing: false,
+    dataHandling: "server",
   },
 ];
 

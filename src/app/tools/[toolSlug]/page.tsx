@@ -17,8 +17,10 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
   const tool = getToolBySlug(toolSlug);
   if (!tool) return {};
   return {
-    title: `${tool.name} — DevKit`,
+    title: tool.name,
     description: tool.description,
+    alternates: { canonical: `/tools/${tool.slug}` },
+    openGraph: { title: tool.name, description: tool.description },
   };
 }
 
@@ -32,7 +34,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
       slug={tool.slug}
       title={tool.name}
       description={tool.description}
-      localProcessing={tool.localProcessing ?? true}
+      dataHandling={tool.dataHandling ?? "local"}
     >
       <ToolComponentLoader slug={tool.slug} />
     </ToolShell>
