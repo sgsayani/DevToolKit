@@ -23,13 +23,13 @@ export function MockPreview({ fields, recordCount, responseShape }: MockPreviewP
   );
 
   return (
-    <div className="rounded-lg border border-border p-3">
+    <div className="rounded-lg border border-editor-border bg-editor p-3">
       {!hasNamedFields ? (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-editor-muted">
           Add at least one named field above to preview sample data.
         </p>
       ) : !hasMounted ? (
-        <p className="text-sm text-muted-foreground">Generating preview…</p>
+        <p className="text-sm text-editor-muted">Generating preview…</p>
       ) : (
         <JsonTreeView data={data} />
       )}

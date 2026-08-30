@@ -4,7 +4,8 @@ import { useState } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ToolPanel, ToolActionBar } from "@/components/tools/shared/tool-panels";
+import { ToolActionBar } from "@/components/tools/shared/tool-panels";
+import { EditorPanel } from "@/components/tools/shared/editor-panel";
 import { ShortcutHint } from "@/components/tools/shared/shortcut-hint";
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
 import { validateJson, formatJsonErrorMessage, type ValidateJsonResult } from "@/lib/utils/json";
@@ -28,16 +29,17 @@ export function JsonValidatorTool() {
 
   return (
     <div className="flex flex-col gap-4">
-      <ToolPanel title="Input" htmlFor="json-validator-input">
+      <EditorPanel label="INPUT">
         <Textarea
-          id="json-validator-input"
+          variant="code"
+          aria-label="Input"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={SAMPLE}
-          className="min-h-[320px] font-mono text-sm"
+          className="min-h-[320px] rounded-none border-0 focus-visible:ring-0"
           spellCheck={false}
         />
-      </ToolPanel>
+      </EditorPanel>
 
       <ToolActionBar>
         <Button size="sm" onClick={handleValidate}>

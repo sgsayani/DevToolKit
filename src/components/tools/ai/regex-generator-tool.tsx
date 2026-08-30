@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { ToolPanel, ToolActionBar } from "@/components/tools/shared/tool-panels";
 import { AiNotConfiguredNotice } from "@/components/tools/ai/ai-not-configured-notice";
 import { AiResultSection } from "@/components/tools/ai/ai-result-section";
+import { CodeBlock } from "@/components/tools/shared/code-block";
 import { useAiConfigured } from "@/hooks/use-ai-configured";
 import { callAiEndpoint, type AiResult, type RegexGenerationResult } from "@/lib/utils/ai-client";
 
@@ -67,9 +68,12 @@ export function RegexGeneratorTool() {
             title="Regex"
             copyValue={`/${result.data.regex}/${result.data.flags}`}
           >
-            <pre className="overflow-x-auto rounded-md border border-border bg-muted/30 p-3 font-mono text-sm">
-              /{result.data.regex}/{result.data.flags}
-            </pre>
+            <CodeBlock
+              code={`/${result.data.regex}/${result.data.flags}`}
+              language="text"
+              lineNumbers={false}
+              className="rounded-md"
+            />
           </AiResultSection>
           <AiResultSection title="Explanation" copyValue={result.data.explanation}>
             <p className="text-sm">{result.data.explanation}</p>

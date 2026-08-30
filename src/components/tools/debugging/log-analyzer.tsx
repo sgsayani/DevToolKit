@@ -5,6 +5,7 @@ import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { EditorPanel } from "@/components/tools/shared/editor-panel";
 import { formatBytes } from "@/lib/utils/api-client";
 import {
   analyzeLog,
@@ -23,22 +24,37 @@ const LEVELS: { level: LogLevel; label: string }[] = [
   { level: "other", label: "Other" },
 ];
 
+// The log line viewer sits on the dark --editor surface (see the render
+// below), so these use fixed dark-tuned colors rather than a light/dark pair.
 function levelTextClass(level: LogLevel): string {
   switch (level) {
     case "error":
-      return "text-destructive";
+      return "text-red-400";
     case "warning":
-      return "text-amber-700 dark:text-amber-400";
+      return "text-amber-400";
     case "info":
-      return "text-blue-700 dark:text-blue-400";
+      return "text-blue-400";
     default:
-      return "text-muted-foreground";
+      return "text-editor-muted";
+  }
+}
+
+function levelBorderClass(level: LogLevel): string {
+  switch (level) {
+    case "error":
+      return "border-l-red-500/60";
+    case "warning":
+      return "border-l-amber-500/60";
+    case "info":
+      return "border-l-blue-500/60";
+    default:
+      return "border-l-transparent";
   }
 }
 
 function StatTile({ label, value, className }: { label: string; value: number; className?: string }) {
   return (
-    <div className="flex min-w-[92px] flex-col gap-0.5 rounded-lg border border-border px-3 py-2">
+    <div className="flex min-w-[92px] flex-col gap-0.5 rounded-lg border border-border bg-card px-3 py-2 shadow-xs">
       <span className="text-xs text-muted-foreground">{label}</span>
       <span className={`text-lg font-semibold ${className ?? ""}`}>{value.toLocaleString()}</span>
     </div>
@@ -108,18 +124,19 @@ export function LogAnalyzerTool() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-          Log
-        </span>
-        <Textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder={
-            "2024-06-01T10:00:00Z INFO  Server started on port 3000\n2024-06-01T10:00:02Z WARN  Slow query took 812ms\n2024-06-01T10:00:05Z ERROR Failed to connect to database: timeout"
-          }
-          className="min-h-[160px] max-h-[300px] overflow-y-auto font-mono text-sm"
-          spellCheck={false}
-        />
+        <EditorPanel label="LOG">
+          <Textarea
+            variant="code"
+            aria-label="Log"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder={
+              "2024-06-01T10:00:00Z INFO  Server started on port 3000\n2024-06-01T10:00:02Z WARN  Slow query took 812ms\n2024-06-01T10:00:05Z ERROR Failed to connect to database: timeout"
+            }
+            className="min-h-[160px] max-h-[300px] overflow-y-auto rounded-none border-0 focus-visible:ring-0"
+            spellCheck={false}
+          />
+        </EditorPanel>
         <div className="flex flex-wrap items-center gap-2">
           <input
             ref={fileInputRef}
@@ -231,19 +248,19 @@ export function LogAnalyzerTool() {
             )}
           </div>
 
-          <div className="rounded-lg border border-border">
+          <EditorPanel label="OUTPUT">
             {visibleLines.length === 0 ? (
-              <p className="p-4 text-center text-sm text-muted-foreground">
+              <p className="bg-editor p-4 text-center text-sm text-editor-muted">
                 No lines match the current filters.
               </p>
             ) : (
-              <div className="max-h-[420px] overflow-y-auto font-mono text-xs">
+              <div className="max-h-[420px] overflow-y-auto bg-editor font-mono text-xs">
                 {visibleLines.map((line) => (
                   <div
                     key={line.lineNumber}
-                    className="flex gap-3 border-b border-border/60 px-3 py-1 last:border-0"
+                    className={`flex gap-3 border-b border-l-2 border-editor-border/60 px-3 py-1 last:border-b-0 ${levelBorderClass(line.level)}`}
                   >
-                    <span className="shrink-0 text-muted-foreground select-none">
+                    <span className="shrink-0 text-editor-muted select-none">
                       {line.lineNumber}
                     </span>
                     <span className={`whitespace-pre-wrap ${levelTextClass(line.level)}`}>
@@ -253,7 +270,7 @@ export function LogAnalyzerTool() {
                 ))}
               </div>
             )}
-          </div>
+          </EditorPanel>
           {filteredLines.length > MAX_RENDER_LINES && (
             <p className="text-xs text-muted-foreground">
               Showing the first {MAX_RENDER_LINES.toLocaleString()} of{" "}

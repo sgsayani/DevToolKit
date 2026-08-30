@@ -4,12 +4,9 @@ import { useMemo, useState } from "react";
 import { ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  ToolPanel,
-  ToolPanelGrid,
-  ToolActionBar,
-  ToolErrorPanel,
-} from "@/components/tools/shared/tool-panels";
+import { ToolPanelGrid, ToolActionBar, ToolErrorPanel } from "@/components/tools/shared/tool-panels";
+import { EditorPanel } from "@/components/tools/shared/editor-panel";
+import { CodeBlock } from "@/components/tools/shared/code-block";
 import { CopyButton } from "@/components/tools/shared/copy-button";
 import {
   decodeJwt,
@@ -64,16 +61,17 @@ export function JwtDebuggerTool() {
 
   return (
     <div className="flex flex-col gap-4">
-      <ToolPanel title="Token" htmlFor="jwt-input">
+      <EditorPanel label="TOKEN">
         <Textarea
-          id="jwt-input"
+          variant="code"
+          aria-label="JWT token"
           value={token}
           onChange={(e) => setToken(e.target.value)}
           placeholder={SAMPLE_JWT}
-          className="min-h-[100px] font-mono text-xs"
+          className="min-h-[100px] rounded-none border-0 text-xs focus-visible:ring-0"
           spellCheck={false}
         />
-      </ToolPanel>
+      </EditorPanel>
 
       <div className="flex items-start gap-2 rounded-lg border border-amber-600/30 bg-amber-600/5 p-3 text-sm text-amber-800 dark:text-amber-400">
         <ShieldAlert className="mt-0.5 size-4 shrink-0" />
@@ -109,25 +107,15 @@ export function JwtDebuggerTool() {
           )}
 
           <ToolPanelGrid>
-            <ToolPanel title="Header" action={<CopyButton value={headerText} />}>
-              <Textarea
-                value={headerText}
-                readOnly
-                className="min-h-[160px] font-mono text-sm"
-                spellCheck={false}
-              />
-            </ToolPanel>
-            <ToolPanel title="Payload" action={<CopyButton value={payloadText} />}>
-              <Textarea
-                value={payloadText}
-                readOnly
-                className="min-h-[160px] font-mono text-sm"
-                spellCheck={false}
-              />
-            </ToolPanel>
+            <EditorPanel label="HEADER" actions={<CopyButton value={headerText} />}>
+              <CodeBlock code={headerText} language="json" lineNumbers={false} className="min-h-[160px]" />
+            </EditorPanel>
+            <EditorPanel label="PAYLOAD" actions={<CopyButton value={payloadText} />}>
+              <CodeBlock code={payloadText} language="json" lineNumbers={false} className="min-h-[160px]" />
+            </EditorPanel>
           </ToolPanelGrid>
 
-          <div className="rounded-lg border border-border p-4">
+          <div className="rounded-lg border border-border bg-card p-4 shadow-xs">
             <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
               Claims
             </span>
@@ -142,14 +130,11 @@ export function JwtDebuggerTool() {
             </div>
           </div>
 
-          <ToolPanel
-            title="Signature (raw, unverified)"
-            action={<CopyButton value={result.signature ?? ""} />}
-          >
-            <div className="rounded-lg border border-border bg-muted/30 p-3 font-mono text-xs break-all">
+          <EditorPanel label="SIGNATURE (RAW, UNVERIFIED)" actions={<CopyButton value={result.signature ?? ""} />}>
+            <div className="bg-editor p-3 font-mono text-xs break-all text-editor-foreground">
               {result.signature}
             </div>
-          </ToolPanel>
+          </EditorPanel>
         </>
       )}
     </div>

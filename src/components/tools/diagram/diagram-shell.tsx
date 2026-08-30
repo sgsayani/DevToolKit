@@ -51,7 +51,7 @@ function ExportControls({ nodes, filenamePrefix }: { nodes: Node[]; filenamePref
 
   return (
     <Panel position="top-right" className="flex flex-col items-end gap-1">
-      <div className="flex gap-1 rounded-lg border border-border bg-background p-1 shadow-sm">
+      <div className="flex gap-1 rounded-lg border border-border bg-card p-1 shadow-sm">
         <Button type="button" variant="ghost" size="sm" disabled={exporting} onClick={() => handleExport("png")}>
           <Download className="size-3.5" />
           PNG
@@ -90,7 +90,7 @@ export function DiagramShell<NodeType extends Node = Node, EdgeType extends Edge
   children,
 }: DiagramShellProps<NodeType, EdgeType>) {
   return (
-    <div className="h-[70vh] min-h-[520px] w-full overflow-hidden rounded-lg border border-border">
+    <div className="h-[70vh] min-h-[520px] w-full overflow-hidden rounded-lg border border-border bg-card">
       <ReactFlowProvider>
         <ReactFlow<NodeType, EdgeType>
           nodes={nodes}

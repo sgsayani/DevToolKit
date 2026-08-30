@@ -5,6 +5,7 @@ import { AlertTriangle, Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CopyButton } from "@/components/tools/shared/copy-button";
 import { DownloadButton } from "@/components/tools/shared/download-button";
+import { EditorPanel } from "@/components/tools/shared/editor-panel";
 import { JsonTreeView } from "@/components/tools/api-client/json-tree-view";
 import { httpStatuses } from "@/lib/utils/http-status";
 import { formatBytes, formatDuration, type ProxyResult } from "@/lib/utils/api-client";
@@ -108,17 +109,19 @@ export function ResponsePanel({ result, loading }: ResponsePanelProps) {
               label="Download"
             />
           </div>
-          <div className="rounded-lg border border-border p-3">
-            {result.body.trim() === "" ? (
-              <p className="text-sm text-muted-foreground">Empty response body.</p>
-            ) : parsedJson ? (
-              <JsonTreeView data={parsedJson.value} />
-            ) : (
-              <pre className="font-mono text-sm break-words whitespace-pre-wrap">
-                {result.body}
-              </pre>
-            )}
-          </div>
+          <EditorPanel label={parsedJson ? "json" : "text"}>
+            <div className="p-3">
+              {result.body.trim() === "" ? (
+                <p className="text-sm text-editor-muted">Empty response body.</p>
+              ) : parsedJson ? (
+                <JsonTreeView data={parsedJson.value} />
+              ) : (
+                <pre className="font-mono text-sm text-editor-foreground break-words whitespace-pre-wrap">
+                  {result.body}
+                </pre>
+              )}
+            </div>
+          </EditorPanel>
         </TabsContent>
 
         <TabsContent value="headers" className="pt-3">

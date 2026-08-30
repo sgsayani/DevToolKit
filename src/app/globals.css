@@ -11,6 +11,18 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
+  --color-editor: var(--editor);
+  --color-editor-foreground: var(--editor-foreground);
+  --color-editor-toolbar: var(--editor-toolbar);
+  --color-editor-border: var(--editor-border);
+  --color-editor-muted: var(--editor-muted);
+  --color-syntax-keyword: var(--syntax-keyword);
+  --color-syntax-string: var(--syntax-string);
+  --color-syntax-number: var(--syntax-number);
+  --color-syntax-boolean: var(--syntax-boolean);
+  --color-syntax-function: var(--syntax-function);
+  --color-syntax-comment: var(--syntax-comment);
+  --color-syntax-punctuation: var(--syntax-punctuation);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -50,16 +62,20 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
+  /* Page canvas sits a shade below pure white; workspace surfaces (cards,
+     panels, the sidebar) are pure white on top of it — that one-shade
+     difference is what gives the app surface depth instead of everything
+     blending into one flat plane. */
+  --background: oklch(0.975 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: oklch(0.96 0 0);
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  --muted: oklch(0.955 0 0);
+  --muted-foreground: oklch(0.5 0 0);
   /* Single sophisticated accent — a muted indigo-blue, not neon, not purple.
      Drives primary buttons, focus rings, links, and tinted selected/active
      surfaces everywhere via the shared shadcn tokens below. */
@@ -77,7 +93,7 @@
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(0.97 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.5 0.15 262);
   --sidebar-primary-foreground: oklch(0.985 0 0);
@@ -85,6 +101,26 @@
   --sidebar-accent-foreground: oklch(0.32 0.11 262);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.6 0.14 262);
+
+  /* Developer "editor" surface — deliberately dark in BOTH light and dark
+     app theme, like a code editor embedded in a light IDE shell. Deepened
+     further under .dark below, so it still reads as its own layer even
+     when the surrounding shell has gone dark too. */
+  --editor: oklch(0.22 0.015 260);
+  --editor-toolbar: oklch(0.27 0.015 260);
+  --editor-foreground: oklch(0.92 0 0);
+  --editor-muted: oklch(0.58 0.005 260);
+  --editor-border: oklch(1 0 0 / 12%);
+
+  /* Restrained syntax palette, tuned for the dark editor surface above —
+     fixed regardless of app theme, since the editor itself never lightens. */
+  --syntax-keyword: oklch(0.72 0.14 280);
+  --syntax-string: oklch(0.75 0.13 155);
+  --syntax-number: oklch(0.78 0.13 70);
+  --syntax-boolean: oklch(0.78 0.11 320);
+  --syntax-function: oklch(0.82 0.13 95);
+  --syntax-comment: oklch(0.58 0.01 260);
+  --syntax-punctuation: oklch(0.75 0 0);
 }
 
 .dark {
@@ -111,7 +147,7 @@
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
+  --sidebar: oklch(0.19 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.62 0.16 262);
   --sidebar-primary-foreground: oklch(0.99 0 0);
@@ -119,6 +155,12 @@
   --sidebar-accent-foreground: oklch(0.9 0.04 262);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.62 0.16 262);
+
+  /* Deeper than light mode's editor surface — the darkest layer in the
+     whole app, so it still reads as a distinct "editor" plane even though
+     the shell around it has gone dark too. */
+  --editor: oklch(0.12 0.01 260);
+  --editor-toolbar: oklch(0.16 0.01 260);
 }
 
 @layer base {
@@ -133,49 +175,37 @@
   }
 }
 
-/* Code Share's syntax highlighting — a small custom token palette instead
-   of importing one of highlight.js's bundled themes, so paste content
-   matches DevKit's own colors (the same string/number/keyword convention
-   already used by the JSON tree view) rather than introducing a separate
-   visual style. */
+/* Code Share's syntax highlighting — rendered on the dark --editor surface
+   (see EDITOR SURFACE section below), so these colors are the fixed
+   --syntax-* palette rather than theme-toggle-aware light/dark pairs. */
 .hljs {
-  color: var(--foreground);
+  color: var(--editor-foreground);
 }
 .hljs-comment,
 .hljs-quote {
-  color: var(--muted-foreground);
+  color: var(--syntax-comment);
   font-style: italic;
 }
 .hljs-string,
 .hljs-attr,
 .hljs-regexp,
 .hljs-symbol {
-  color: oklch(0.45 0.13 155);
-}
-.dark .hljs-string,
-.dark .hljs-attr,
-.dark .hljs-regexp,
-.dark .hljs-symbol {
-  color: oklch(0.75 0.15 155);
+  color: var(--syntax-string);
 }
 .hljs-number,
 .hljs-literal {
-  color: oklch(0.45 0.16 255);
-}
-.dark .hljs-number,
-.dark .hljs-literal {
-  color: oklch(0.72 0.14 255);
+  color: var(--syntax-number);
 }
 .hljs-keyword,
 .hljs-built_in,
 .hljs-tag,
 .hljs-name,
 .hljs-selector-tag {
-  color: var(--primary);
+  color: var(--syntax-keyword);
 }
 .hljs-title,
 .hljs-title.function_,
 .hljs-title.class_ {
-  color: var(--foreground);
+  color: var(--syntax-function);
   font-weight: 600;
 }

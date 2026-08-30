@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ToolPanel, ToolActionBar } from "@/components/tools/shared/tool-panels";
+import { EditorPanel } from "@/components/tools/shared/editor-panel";
 import { createPaste, updatePaste } from "@/lib/utils/paste-client";
 import {
   PASTE_EXPIRATIONS,
@@ -106,25 +107,25 @@ export function PasteForm({ mode, pasteId, initial }: PasteFormProps) {
         </ToolPanel>
       </div>
 
-      <ToolPanel
-        title="Content"
-        htmlFor="paste-content"
-        action={
-          <span className="text-xs text-muted-foreground">
+      <EditorPanel
+        label="CONTENT"
+        actions={
+          <span className="text-xs text-editor-muted">
             {lineCount} {lineCount === 1 ? "line" : "lines"} ·{" "}
             {content.length.toLocaleString()} / {PASTE_MAX_CONTENT_LENGTH.toLocaleString()} chars
           </span>
         }
       >
         <Textarea
-          id="paste-content"
+          variant="code"
+          aria-label="Content"
           value={content}
           onChange={(e) => setContent(e.target.value.slice(0, PASTE_MAX_CONTENT_LENGTH))}
           placeholder="Paste your code or text here…"
-          className="min-h-[320px] font-mono text-sm"
+          className="min-h-[320px] rounded-none border-0 focus-visible:ring-0"
           spellCheck={false}
         />
-      </ToolPanel>
+      </EditorPanel>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <ToolPanel title="Visibility" htmlFor="paste-visibility">

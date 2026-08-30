@@ -12,7 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ToolPanel, ToolActionBar, ToolErrorPanel } from "@/components/tools/shared/tool-panels";
+import { ToolActionBar, ToolErrorPanel } from "@/components/tools/shared/tool-panels";
+import { EditorPanel } from "@/components/tools/shared/editor-panel";
 import { CopyButton } from "@/components/tools/shared/copy-button";
 import { runRegex, COMMON_PATTERNS, type RegexMatch } from "@/lib/utils/regex";
 
@@ -26,10 +27,7 @@ function renderHighlighted(text: string, matches: RegexMatch[]): ReactNode[] {
   matches.forEach((m, i) => {
     if (m.index > cursor) nodes.push(text.slice(cursor, m.index));
     nodes.push(
-      <mark
-        key={i}
-        className="rounded bg-amber-300/60 px-0.5 text-foreground dark:bg-amber-400/30"
-      >
+      <mark key={i} className="rounded bg-amber-400/30 px-0.5 text-editor-foreground">
         {m.match}
       </mark>,
     );
@@ -115,16 +113,17 @@ export function RegexTesterTool() {
         </div>
       </div>
 
-      <ToolPanel title="Test text" htmlFor="regex-test-text">
+      <EditorPanel label="TEST TEXT">
         <Textarea
-          id="regex-test-text"
+          variant="code"
+          aria-label="Test text"
           value={testText}
           onChange={(e) => setTestText(e.target.value)}
           placeholder={SAMPLE_TEXT}
-          className="min-h-[140px] font-mono text-sm"
+          className="min-h-[140px] rounded-none border-0 focus-visible:ring-0"
           spellCheck={false}
         />
-      </ToolPanel>
+      </EditorPanel>
 
       {!result.ok && <ToolErrorPanel>{result.error}</ToolErrorPanel>}
 
@@ -137,11 +136,11 @@ export function RegexTesterTool() {
             <CopyButton value={matchesText} label="Copy matches" />
           </div>
 
-          <div className="min-h-[80px] rounded-lg border border-border p-3 font-mono text-sm break-words whitespace-pre-wrap">
+          <div className="min-h-[80px] rounded-lg border border-editor-border bg-editor p-3 font-mono text-sm break-words whitespace-pre-wrap text-editor-foreground">
             {testText ? (
               renderHighlighted(testText, matches)
             ) : (
-              <span className="text-muted-foreground">No test text yet.</span>
+              <span className="text-editor-muted">No test text yet.</span>
             )}
           </div>
 

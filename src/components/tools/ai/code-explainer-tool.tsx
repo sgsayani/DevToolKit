@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ToolPanel, ToolActionBar } from "@/components/tools/shared/tool-panels";
+import { ToolActionBar } from "@/components/tools/shared/tool-panels";
+import { EditorPanel } from "@/components/tools/shared/editor-panel";
 import { AiNotConfiguredNotice } from "@/components/tools/ai/ai-not-configured-notice";
 import { AiResultSection } from "@/components/tools/ai/ai-result-section";
 import { useAiConfigured } from "@/hooks/use-ai-configured";
@@ -41,17 +42,18 @@ export function CodeExplainerTool() {
     <div className="flex flex-col gap-4">
       {configured === false && <AiNotConfiguredNotice />}
 
-      <ToolPanel title="Code" htmlFor="code-explainer-input">
+      <EditorPanel label="CODE">
         <Textarea
-          id="code-explainer-input"
+          variant="code"
+          aria-label="Code"
           value={code}
           onChange={(e) => setCode(e.target.value)}
           placeholder={SAMPLE}
-          className="min-h-[200px] font-mono text-sm"
+          className="min-h-[200px] rounded-none border-0 focus-visible:ring-0"
           spellCheck={false}
           maxLength={MAX_LENGTH}
         />
-      </ToolPanel>
+      </EditorPanel>
 
       <ToolActionBar>
         <Button onClick={handleExplain} disabled={loading || configured === false || !code.trim()}>

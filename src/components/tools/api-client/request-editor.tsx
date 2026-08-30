@@ -157,10 +157,12 @@ export function RequestEditor({
           {bodyType !== "none" && (
             <>
               <Textarea
+                variant="code"
+                aria-label="Request body"
                 value={bodyText}
                 onChange={(e) => onBodyTextChange(e.target.value)}
                 placeholder={bodyType === "json" ? '{\n  "key": "value"\n}' : "Request body"}
-                className="min-h-[180px] font-mono text-sm"
+                className="min-h-[180px]"
                 spellCheck={false}
               />
               {jsonError && (

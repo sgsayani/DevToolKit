@@ -43,9 +43,14 @@ export function ToolActionBar({ children }: { children: ReactNode }) {
 }
 
 /** Monospace error panel, sized to match a text output panel. */
-export function ToolErrorPanel({ children }: { children: ReactNode }) {
+export function ToolErrorPanel({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className="min-h-[320px] rounded-lg border border-destructive/30 bg-destructive/5 p-3 font-mono text-sm whitespace-pre-wrap text-destructive">
+    <div
+      className={cn(
+        "min-h-[320px] rounded-lg border border-destructive/30 bg-destructive/5 p-3 font-mono text-sm whitespace-pre-wrap text-destructive",
+        className,
+      )}
+    >
       {children}
     </div>
   );

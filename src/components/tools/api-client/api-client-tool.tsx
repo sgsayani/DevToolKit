@@ -137,24 +137,29 @@ export function ApiClientTool() {
       </aside>
 
       <div className="order-1 flex min-w-0 flex-1 flex-col gap-3 lg:order-2">
-        <RequestEditor
-          method={method}
-          onMethodChange={setMethod}
-          url={url}
-          onUrlChange={setUrl}
-          params={params}
-          onParamsChange={setParams}
-          headers={headers}
-          onHeadersChange={setHeaders}
-          bodyType={bodyType}
-          onBodyTypeChange={setBodyType}
-          bodyText={bodyText}
-          onBodyTextChange={setBodyText}
-          auth={auth}
-          onAuthChange={setAuth}
-          onSend={() => void handleSend()}
-          sending={sending}
-        />
+        <div className="flex flex-col gap-3 rounded-lg border border-border bg-card p-3 shadow-xs">
+          <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            Request
+          </span>
+          <RequestEditor
+            method={method}
+            onMethodChange={setMethod}
+            url={url}
+            onUrlChange={setUrl}
+            params={params}
+            onParamsChange={setParams}
+            headers={headers}
+            onHeadersChange={setHeaders}
+            bodyType={bodyType}
+            onBodyTypeChange={setBodyType}
+            bodyText={bodyText}
+            onBodyTextChange={setBodyText}
+            auth={auth}
+            onAuthChange={setAuth}
+            onSend={() => void handleSend()}
+            sending={sending}
+          />
+        </div>
 
         <div
           role="separator"
@@ -169,9 +174,12 @@ export function ApiClientTool() {
         </div>
 
         <div
-          className="overflow-y-auto rounded-lg border border-border p-3"
+          className="flex flex-col gap-3 overflow-y-auto rounded-lg border border-border bg-card p-3 shadow-xs"
           style={{ height: responseHeight }}
         >
+          <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            Response
+          </span>
           <ResponsePanel result={result} loading={sending} />
         </div>
       </div>

@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ToolPanel, ToolActionBar } from "@/components/tools/shared/tool-panels";
+import { ToolActionBar } from "@/components/tools/shared/tool-panels";
+import { EditorPanel } from "@/components/tools/shared/editor-panel";
+import { CodeBlock } from "@/components/tools/shared/code-block";
 import { AiNotConfiguredNotice } from "@/components/tools/ai/ai-not-configured-notice";
 import { AiResultSection } from "@/components/tools/ai/ai-result-section";
 import { useAiConfigured } from "@/hooks/use-ai-configured";
@@ -36,17 +38,18 @@ export function ErrorExplainerTool() {
     <div className="flex flex-col gap-4">
       {configured === false && <AiNotConfiguredNotice />}
 
-      <ToolPanel title="Error or stack trace" htmlFor="error-explainer-input">
+      <EditorPanel label="ERROR OR STACK TRACE">
         <Textarea
-          id="error-explainer-input"
+          variant="code"
+          aria-label="Error or stack trace"
           value={errorText}
           onChange={(e) => setErrorText(e.target.value)}
           placeholder={SAMPLE}
-          className="min-h-[160px] font-mono text-sm"
+          className="min-h-[160px] rounded-none border-0 focus-visible:ring-0"
           spellCheck={false}
           maxLength={MAX_LENGTH}
         />
-      </ToolPanel>
+      </EditorPanel>
 
       <ToolActionBar>
         <Button onClick={handleExplain} disabled={loading || configured === false || !errorText.trim()}>
@@ -79,9 +82,7 @@ export function ErrorExplainerTool() {
             </ul>
           </AiResultSection>
           <AiResultSection title="Example solution" copyValue={result.data.exampleSolution}>
-            <pre className="overflow-x-auto rounded-md border border-border bg-muted/30 p-3 font-mono text-xs whitespace-pre-wrap">
-              {result.data.exampleSolution}
-            </pre>
+            <CodeBlock code={result.data.exampleSolution} language="text" lineNumbers={false} className="rounded-md" />
           </AiResultSection>
         </div>
       )}

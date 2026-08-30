@@ -10,12 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  ToolPanel,
-  ToolPanelGrid,
-  ToolActionBar,
-  ToolErrorPanel,
-} from "@/components/tools/shared/tool-panels";
+import { ToolPanelGrid, ToolActionBar, ToolErrorPanel } from "@/components/tools/shared/tool-panels";
+import { EditorPanel } from "@/components/tools/shared/editor-panel";
+import { CodeBlock } from "@/components/tools/shared/code-block";
 import { CopyButton } from "@/components/tools/shared/copy-button";
 import { DownloadButton } from "@/components/tools/shared/download-button";
 import { ShortcutHint } from "@/components/tools/shared/shortcut-hint";
@@ -52,29 +49,35 @@ export function JsonFormatterTool() {
   return (
     <div className="flex flex-col gap-4">
       <ToolPanelGrid>
-        <ToolPanel title="Input" htmlFor="json-formatter-input">
+        <EditorPanel label="INPUT">
           <Textarea
-            id="json-formatter-input"
+            variant="code"
+            aria-label="Input"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={SAMPLE}
-            className="min-h-[320px] font-mono text-sm"
+            className="min-h-[320px] rounded-none border-0 focus-visible:ring-0"
             spellCheck={false}
           />
-        </ToolPanel>
-        <ToolPanel title="Output">
-          {errorMessage ? (
-            <ToolErrorPanel>{errorMessage}</ToolErrorPanel>
-          ) : (
-            <Textarea
-              value={output}
-              readOnly
-              placeholder="Formatted JSON will appear here."
-              className="min-h-[320px] font-mono text-sm"
-              spellCheck={false}
-            />
-          )}
-        </ToolPanel>
+        </EditorPanel>
+
+        {errorMessage ? (
+          <EditorPanel label="OUTPUT">
+            <ToolErrorPanel className="min-h-[320px] rounded-none border-0 bg-transparent">
+              {errorMessage}
+            </ToolErrorPanel>
+          </EditorPanel>
+        ) : (
+          <EditorPanel label="OUTPUT">
+            {output ? (
+              <CodeBlock code={output} language="json" className="min-h-[320px]" />
+            ) : (
+              <p className="min-h-[320px] bg-editor px-3 py-2 text-sm text-editor-muted">
+                Formatted JSON will appear here.
+              </p>
+            )}
+          </EditorPanel>
+        )}
       </ToolPanelGrid>
 
       <ToolActionBar>

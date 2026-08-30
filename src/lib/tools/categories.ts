@@ -1,30 +1,6 @@
-import {
-  Braces,
-  Binary,
-  Wand2,
-  Globe,
-  Bug,
-  Send,
-  Database,
-  Repeat,
-  Workflow,
-  Cpu,
-  Share2,
-  type LucideIcon,
-} from "lucide-react";
+import { Send, Bug, Database, Wand2, Workflow, Share2, Cpu, type LucideIcon } from "lucide-react";
 
-export type CategoryId =
-  | "json"
-  | "encoding"
-  | "generators"
-  | "web"
-  | "debugging"
-  | "api-testing"
-  | "database"
-  | "conversion"
-  | "diagrams"
-  | "ai"
-  | "share";
+export type CategoryId = "api" | "debug" | "data" | "generators" | "visualize" | "share" | "ai";
 
 export interface Category {
   id: CategoryId;
@@ -35,85 +11,55 @@ export interface Category {
 }
 
 export const categories: Record<CategoryId, Category> = {
-  json: {
-    id: "json",
-    label: "JSON",
-    description: "Format, validate, and minify JSON.",
-    icon: Braces,
+  api: {
+    id: "api",
+    label: "API",
+    description: "Send requests, document endpoints, and mock APIs.",
+    icon: Send,
     order: 0,
   },
-  encoding: {
-    id: "encoding",
-    label: "Encoding",
-    description: "Encode and decode text.",
-    icon: Binary,
+  debug: {
+    id: "debug",
+    label: "Debug",
+    description: "Format JSON and debug JWTs, regex, diffs, timestamps, hashes, and logs.",
+    icon: Bug,
     order: 1,
+  },
+  data: {
+    id: "data",
+    label: "Data",
+    description: "Encode, decode, parse, and convert between data formats.",
+    icon: Database,
+    order: 2,
   },
   generators: {
     id: "generators",
     label: "Generators",
-    description: "Generate UUIDs and passwords.",
+    description: "Generate UUIDs, passwords, git commands, and look up HTTP statuses.",
     icon: Wand2,
-    order: 2,
-  },
-  web: {
-    id: "web",
-    label: "Web",
-    description: "Inspect URLs and HTTP status codes.",
-    icon: Globe,
     order: 3,
   },
-  debugging: {
-    id: "debugging",
-    label: "Debugging",
-    description: "Debug JWTs, regex, diffs, timestamps, hashes, and logs.",
-    icon: Bug,
-    order: 4,
-  },
-  "api-testing": {
-    id: "api-testing",
-    label: "API Testing",
-    description: "Send requests, document endpoints, and mock APIs.",
-    icon: Send,
-    order: 5,
-  },
-  database: {
-    id: "database",
-    label: "Database",
-    description: "Format SQL queries.",
-    icon: Database,
-    order: 6,
-  },
-  conversion: {
-    id: "conversion",
-    label: "Conversion",
-    description: "Convert between JSON, CSV, YAML, and XML.",
-    icon: Repeat,
-    order: 7,
-  },
-  diagrams: {
-    id: "diagrams",
-    label: "Diagrams",
-    description: "Visualize database schemas and system architecture.",
+  visualize: {
+    id: "visualize",
+    label: "Visualize",
+    description: "Diagram database schemas and system architecture.",
     icon: Workflow,
-    order: 8,
-  },
-  ai: {
-    id: "ai",
-    label: "AI Assistant",
-    description: "Explain errors and code, and generate git, SQL, and regex.",
-    icon: Cpu,
-    order: 9,
+    order: 4,
   },
   share: {
     id: "share",
     label: "Share",
     description: "Share code snippets and text via a link.",
     icon: Share2,
-    order: 10,
+    order: 5,
+  },
+  ai: {
+    id: "ai",
+    label: "AI",
+    description: "Explain errors and code, and generate SQL and regex.",
+    icon: Cpu,
+    order: 6,
   },
 };
 
-export const categoryList = Object.values(categories).sort(
-  (a, b) => a.order - b.order,
-);
+export const categoryList = Object.values(categories).sort((a, b) => a.order - b.order);

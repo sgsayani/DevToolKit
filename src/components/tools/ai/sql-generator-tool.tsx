@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { ToolPanel, ToolActionBar } from "@/components/tools/shared/tool-panels";
 import { AiNotConfiguredNotice } from "@/components/tools/ai/ai-not-configured-notice";
 import { AiResultSection } from "@/components/tools/ai/ai-result-section";
+import { CodeBlock } from "@/components/tools/shared/code-block";
 import { useAiConfigured } from "@/hooks/use-ai-configured";
 import { callAiEndpoint, type AiResult, type SqlGenerationResult } from "@/lib/utils/ai-client";
 
@@ -70,9 +71,7 @@ export function SqlGeneratorTool() {
       {result?.ok && result.data && (
         <div className="flex flex-col gap-3">
           <AiResultSection title="SQL" copyValue={result.data.sql}>
-            <pre className="overflow-x-auto rounded-md border border-border bg-muted/30 p-3 font-mono text-sm">
-              {result.data.sql}
-            </pre>
+            <CodeBlock code={result.data.sql} language="sql" lineNumbers={false} className="rounded-md" />
           </AiResultSection>
           <AiResultSection title="Explanation" copyValue={result.data.explanation}>
             <p className="text-sm">{result.data.explanation}</p>

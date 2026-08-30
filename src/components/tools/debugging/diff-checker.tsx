@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import { ArrowLeftRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ToolPanel, ToolPanelGrid, ToolActionBar } from "@/components/tools/shared/tool-panels";
+import { ToolPanelGrid, ToolActionBar } from "@/components/tools/shared/tool-panels";
+import { EditorPanel } from "@/components/tools/shared/editor-panel";
 import { CopyButton } from "@/components/tools/shared/copy-button";
 import { cn } from "@/lib/utils";
 import { diffLines, toUnifiedText, type DiffLineType } from "@/lib/utils/diff";
@@ -19,16 +20,27 @@ const MAX_RENDER_LINES = 3000;
 function rowClass(type: DiffLineType): string {
   switch (type) {
     case "added":
-      return "bg-emerald-600/10";
+      return "bg-emerald-500/10";
     case "removed":
-      return "bg-destructive/10";
+      return "bg-destructive/15";
     default:
       return "";
   }
 }
 
+function markerClass(type: DiffLineType): string {
+  switch (type) {
+    case "added":
+      return "text-emerald-400 font-semibold";
+    case "removed":
+      return "text-red-400 font-semibold";
+    default:
+      return "text-editor-muted/50";
+  }
+}
+
 function marker(type: DiffLineType): string {
-  return type === "added" ? "+" : type === "removed" ? "-" : " ";
+  return type === "added" ? "+" : type === "removed" ? "-" : "";
 }
 
 export function DiffCheckerTool() {
@@ -57,26 +69,28 @@ export function DiffCheckerTool() {
   return (
     <div className="flex flex-col gap-4">
       <ToolPanelGrid>
-        <ToolPanel title="Original" htmlFor="diff-original">
+        <EditorPanel label="ORIGINAL">
           <Textarea
-            id="diff-original"
+            variant="code"
+            aria-label="Original"
             value={original}
             onChange={(e) => setOriginal(e.target.value)}
             placeholder={SAMPLE_ORIGINAL}
-            className="min-h-[220px] font-mono text-sm"
+            className="min-h-[220px] rounded-none border-0 focus-visible:ring-0"
             spellCheck={false}
           />
-        </ToolPanel>
-        <ToolPanel title="Modified" htmlFor="diff-modified">
+        </EditorPanel>
+        <EditorPanel label="MODIFIED">
           <Textarea
-            id="diff-modified"
+            variant="code"
+            aria-label="Modified"
             value={modified}
             onChange={(e) => setModified(e.target.value)}
             placeholder={SAMPLE_MODIFIED}
-            className="min-h-[220px] font-mono text-sm"
+            className="min-h-[220px] rounded-none border-0 focus-visible:ring-0"
             spellCheck={false}
           />
-        </ToolPanel>
+        </EditorPanel>
       </ToolPanelGrid>
 
       <ToolActionBar>
@@ -108,25 +122,25 @@ export function DiffCheckerTool() {
             )}
           </div>
 
-          <div className="overflow-x-auto rounded-lg border border-border font-mono text-xs">
+          <div className="overflow-x-auto rounded-lg border border-editor-border bg-editor font-mono text-xs text-editor-foreground">
             {visibleLines.map((line, i) => (
               <div key={i} className={cn("flex", rowClass(line.type))}>
-                <span className="w-10 shrink-0 px-2 py-0.5 text-right text-muted-foreground select-none">
+                <span className="w-10 shrink-0 px-2 py-0.5 text-right text-editor-muted select-none">
                   {line.aLine ?? ""}
                 </span>
-                <span className="w-10 shrink-0 border-r border-border px-2 py-0.5 text-right text-muted-foreground select-none">
+                <span className="w-10 shrink-0 border-r border-editor-border px-2 py-0.5 text-right text-editor-muted select-none">
                   {line.bLine ?? ""}
                 </span>
-                <span className="w-4 shrink-0 px-1 py-0.5 text-center select-none">
+                <span className={cn("w-4 shrink-0 px-1 py-0.5 text-center select-none", markerClass(line.type))}>
                   {marker(line.type)}
                 </span>
                 <span className="flex-1 px-1 py-0.5 break-all whitespace-pre-wrap">
-                  {line.content === "" ? " " : line.content}
+                  {line.content === "" ? " " : line.content}
                 </span>
               </div>
             ))}
             {visibleLines.length === 0 && (
-              <div className="p-4 text-center text-muted-foreground">No differences.</div>
+              <div className="p-4 text-center text-editor-muted">No differences.</div>
             )}
           </div>
         </div>

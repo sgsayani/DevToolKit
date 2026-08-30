@@ -3,12 +3,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  ToolPanel,
-  ToolPanelGrid,
-  ToolActionBar,
-  ToolErrorPanel,
-} from "@/components/tools/shared/tool-panels";
+import { ToolPanelGrid, ToolActionBar, ToolErrorPanel } from "@/components/tools/shared/tool-panels";
+import { EditorPanel } from "@/components/tools/shared/editor-panel";
+import { CodeBlock } from "@/components/tools/shared/code-block";
 import { CopyButton } from "@/components/tools/shared/copy-button";
 import { DownloadButton } from "@/components/tools/shared/download-button";
 import { ShortcutHint } from "@/components/tools/shared/shortcut-hint";
@@ -43,29 +40,35 @@ export function SqlFormatterTool() {
       </p>
 
       <ToolPanelGrid>
-        <ToolPanel title="Input" htmlFor="sql-formatter-input">
+        <EditorPanel label="INPUT">
           <Textarea
-            id="sql-formatter-input"
+            variant="code"
+            aria-label="Input"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={SAMPLE}
-            className="min-h-[320px] font-mono text-sm"
+            className="min-h-[320px] rounded-none border-0 focus-visible:ring-0"
             spellCheck={false}
           />
-        </ToolPanel>
-        <ToolPanel title="Output">
-          {result && !result.ok ? (
-            <ToolErrorPanel>{result.error}</ToolErrorPanel>
-          ) : (
-            <Textarea
-              value={output}
-              readOnly
-              placeholder="Formatted SQL will appear here."
-              className="min-h-[320px] font-mono text-sm"
-              spellCheck={false}
-            />
-          )}
-        </ToolPanel>
+        </EditorPanel>
+
+        {result && !result.ok ? (
+          <EditorPanel label="OUTPUT">
+            <ToolErrorPanel className="min-h-[320px] rounded-none border-0 bg-transparent">
+              {result.error}
+            </ToolErrorPanel>
+          </EditorPanel>
+        ) : (
+          <EditorPanel label="OUTPUT">
+            {output ? (
+              <CodeBlock code={output} language="sql" className="min-h-[320px]" />
+            ) : (
+              <p className="min-h-[320px] bg-editor px-3 py-2 text-sm text-editor-muted">
+                Formatted SQL will appear here.
+              </p>
+            )}
+          </EditorPanel>
+        )}
       </ToolPanelGrid>
 
       <ToolActionBar>
