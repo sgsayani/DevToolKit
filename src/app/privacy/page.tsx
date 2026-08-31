@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 
-const LAST_UPDATED = "August 30, 2026";
+const LAST_UPDATED = "September 1, 2026";
 
 export default function PrivacyPage() {
   return (
@@ -96,7 +96,19 @@ export default function PrivacyPage() {
       <section className="flex flex-col gap-2">
         <h2 className="text-lg font-semibold tracking-tight">Analytics</h2>
         <p className="text-sm text-muted-foreground">
-          DevKit does not use any third-party analytics, tracking pixels, or advertising services.
+          DevKit uses{" "}
+          <Link
+            href="https://vercel.com/docs/analytics/privacy-policy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary underline-offset-4 hover:underline"
+          >
+            Vercel Analytics
+          </Link>{" "}
+          to count page views and see which tools get used. It&rsquo;s cookieless and doesn&rsquo;t
+          track you across other sites — see Vercel&rsquo;s own page linked above for exactly what
+          it collects. DevKit does not use any other analytics, tracking pixels, or advertising
+          services.
         </p>
       </section>
 
